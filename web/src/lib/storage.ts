@@ -1,7 +1,8 @@
-import type { SavedPlan, WorkbenchDraft } from '../types';
+import type { MeasurementRecord, SavedPlan, WorkbenchDraft } from '../types';
 
 const PLANS_KEY = 'centrifuge-balance:saved-plans:v1';
 const DRAFT_KEY = 'centrifuge-balance:draft:v1';
+const MEASUREMENTS_KEY = 'centrifuge-balance:measurements:v1';
 
 function readJSON<T>(key: string): T | null {
   try {
@@ -44,4 +45,22 @@ export function loadDraft(): WorkbenchDraft | null {
 
 export function persistDraft(draft: WorkbenchDraft): void {
   writeJSON(DRAFT_KEY, draft);
+}
+
+export function loadMeasurements(): MeasurementRecord[] {
+  const records = readJSON<MeasurementRecord[]>(MEASUREMENTS_KEY);
+  return Array.isArray(records) ? records : [];
+}
+
+export function saveMeasurement(record: MeasurementRecord): MeasurementRecord[] {
+  const records = loadMeasurements().filter((item) => item.id !== record.id);
+  records.unshift(record);
+  writeJSON(MEASUREMENTS_KEY, records);
+  return records;
+}
+
+export function deleteMeasurement(id: string): MeasurementRecord[] {
+  const records = loadMeasurements().filter((item) => item.id !== id);
+  writeJSON(MEASUREMENTS_KEY, records);
+  return records;
 }

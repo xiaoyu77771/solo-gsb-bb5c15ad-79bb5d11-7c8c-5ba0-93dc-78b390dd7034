@@ -107,6 +107,18 @@ export interface SavedPlan {
   maxPerSlot?: number;
 }
 
+/** 一次称量快照（测量批次记录，仅存浏览器本地） */
+export interface MeasurementRecord {
+  id: string;
+  /** 批次编号；同一批次编号 + 转子规格的记录归为一组统计 */
+  batchNo: string;
+  holeCount: HoleCount;
+  weights: number[];
+  /** 保存时的工作台阈值（g），仅作记录参考 */
+  threshold: number;
+  savedAt: number;
+}
+
 /** 当前编辑中的工作台状态 */
 export interface WorkbenchDraft {
   holeCount: HoleCount;

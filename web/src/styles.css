@@ -644,6 +644,127 @@ select:focus,
   flex-shrink: 0;
 }
 
+/* ---------- 测量批次 ---------- */
+.batch-save-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.batch-save-row .text-input {
+  flex: 1;
+}
+
+.batch-select-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 10px 0 6px;
+}
+
+.control-inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.batch-summary {
+  margin: 8px 0 12px;
+}
+
+.batch-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 7px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.stats-table th {
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--panel-2);
+}
+
+.stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stats-table .row-abnormal td {
+  background: rgba(255, 93, 115, 0.08);
+}
+
+.batch-subtitle {
+  margin: 14px 0 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.trend-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.trend-axis {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.trend-threshold {
+  stroke: var(--yellow);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  opacity: 0.8;
+}
+
+.trend-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.trend-point {
+  fill: var(--green);
+  stroke: #07111f;
+  stroke-width: 1.5;
+}
+
+.trend-point-over {
+  fill: var(--red);
+}
+
+.trend-label {
+  fill: var(--text-dim);
+  font-size: 10px;
+}
+
+.trend-label-threshold {
+  fill: var(--yellow);
+}
+
+.trend-label-end {
+  text-anchor: end;
+}
+
 /* ---------- Toast ---------- */
 .toast {
   position: fixed;

@@ -4,15 +4,19 @@ import type {
   BalanceMode,
   BalanceResponse,
   HoleCount,
+  MeasurementRecord,
   SavedPlan,
   WorkbenchDraft,
 } from './types';
 import { fetchBalance } from './api/balance';
 import {
+  deleteMeasurement,
   deletePlan,
   loadDraft,
+  loadMeasurements,
   loadPlans,
   persistDraft,
+  saveMeasurement,
   savePlan,
 } from './lib/storage';
 import { RotorDiagram } from './components/RotorDiagram';
@@ -20,6 +24,7 @@ import { StatusPanel } from './components/StatusPanel';
 import { RecommendPanel } from './components/RecommendPanel';
 import { WeightTable } from './components/WeightTable';
 import { PlanBar } from './components/PlanBar';
+import { BatchPanel } from './components/BatchPanel';
 
 const HOLE_OPTIONS: HoleCount[] = [8, 12, 24];
 const DEFAULT_THRESHOLD = 1;
@@ -69,6 +74,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [plans, setPlans] = useState<SavedPlan[]>(() => loadPlans());
+  const [measurements, setMeasurements] = useState<MeasurementRecord[]>(() =>
+    loadMeasurements(),
+  );
   const [activePlan, setActivePlan] = useState<AnyPlan | null>(null);
   const [resetSignal, setResetSignal] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
@@ -263,6 +271,35 @@ export default function App() {
     [showToast],
   );
 
+  // 保存称量快照：只读取当前重量写入本地存储，不改变任何配平状态
+  const handleSaveSnapshot = useCallback(
+    (batchNo: string) => {
+      const record: MeasurementRecord = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        batchNo,
+        holeCount,
+        weights: [...weights],
+        threshold,
+        savedAt: Date.now(),
+      };
+      const next = saveMeasurement(record);
+      setMeasurements(next);
+      const count = next.filter(
+        (item) => item.batchNo === batchNo && item.holeCount === holeCount,
+      ).length;
+      showToast(`批次「${batchNo}」已保存第 ${count} 次称量快照`);
+    },
+    [holeCount, weights, threshold, showToast],
+  );
+
+  const handleDeleteMeasurement = useCallback(
+    (id: string) => {
+      setMeasurements(deleteMeasurement(id));
+      showToast('测量记录已删除');
+    },
+    [showToast],
+  );
+
   const lockedCount = useMemo(() => locked.filter(Boolean).length, [locked]);
 
   return (
@@ -351,6 +388,14 @@ export default function App() {
         onSetWeight={setWeight}
         onToggleLock={toggleLock}
         onClear={clearWeights}
+      />
+
+      <BatchPanel
+        holeCount={holeCount}
+        threshold={threshold}
+        records={measurements}
+        onSaveSnapshot={handleSaveSnapshot}
+        onDeleteRecord={handleDeleteMeasurement}
       />
 
       <PlanBar

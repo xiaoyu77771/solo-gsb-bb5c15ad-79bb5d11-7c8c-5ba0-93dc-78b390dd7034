@@ -31,3 +31,12 @@ export function formatTime(timestamp: number): string {
     date.getDate(),
   )} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
+
+/** 精确到秒的时间（测量记录时间戳） */
+export function formatTimeSec(timestamp: number): string {
+  const date = new Date(timestamp);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
+    date.getHours(),
+  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
