@@ -31,3 +31,19 @@ export function formatTime(timestamp: number): string {
     date.getDate(),
   )} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
+
+/** 秒级时间显示：YYYY-MM-DD HH:mm:ss */
+export function formatTimeSeconds(timestamp: number): string {
+  const date = new Date(timestamp);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${formatTime(timestamp)}:${pad(date.getSeconds())}`;
+}
+
+/** 仅时间部分 HH:mm:ss（趋势图、快照列表紧凑展示用） */
+export function formatClock(timestamp: number): string {
+  const date = new Date(timestamp);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
+    date.getSeconds(),
+  )}`;
+}

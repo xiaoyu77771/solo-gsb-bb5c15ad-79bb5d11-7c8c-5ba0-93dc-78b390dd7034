@@ -644,6 +644,291 @@ select:focus,
   flex-shrink: 0;
 }
 
+/* ---------- 测量批次 ---------- */
+.batch-card {
+  margin-top: 18px;
+}
+
+.batch-thresholds {
+  margin-top: 10px;
+}
+
+.batch-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.batch-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  max-width: 220px;
+  transition:
+    border-color 0.12s,
+    background 0.12s;
+}
+
+.batch-tab:hover {
+  border-color: var(--accent);
+}
+
+.batch-tab-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+.batch-tab-abnormal {
+  border-color: rgba(255, 93, 115, 0.6);
+}
+
+.batch-tab-code {
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 196px;
+}
+
+.batch-tab-meta {
+  color: var(--text-dim);
+}
+
+.batch-tab-meta em {
+  font-style: normal;
+  color: var(--red);
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+.batch-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.batch-summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.batch-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.batch-summary-title strong {
+  font-size: 14px;
+}
+
+.batch-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 16px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+}
+
+.batch-summary-grid dt {
+  color: var(--text-dim);
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.batch-summary-grid dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.batch-summary-grid dd small {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.batch-date-cell {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.5;
+}
+
+.text-danger {
+  color: var(--red);
+}
+
+.text-ok {
+  color: var(--green);
+}
+
+.batch-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.batch-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.batch-table th,
+.batch-table td {
+  padding: 7px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.batch-table th {
+  color: var(--text-dim);
+  font-weight: 500;
+  background: var(--panel-2);
+  position: sticky;
+  top: 0;
+}
+
+.batch-table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.batch-table tbody tr:hover {
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.batch-table tbody tr.row-abnormal {
+  background: rgba(255, 93, 115, 0.07);
+}
+
+.batch-table tbody tr.row-abnormal:hover {
+  background: rgba(255, 93, 115, 0.14);
+}
+
+.batch-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.batch-trend-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* ---------- 趋势图 ---------- */
+.trend-chart {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+  padding: 8px 10px 4px;
+}
+
+.trend-title {
+  margin: 2px 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.trend-legend {
+  color: var(--text-dim);
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.trend-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.trend-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.trend-axis-text {
+  fill: var(--text-dim);
+  font-size: 10px;
+}
+
+.trend-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.trend-reference {
+  stroke: var(--yellow);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  opacity: 0.8;
+}
+
+.trend-point {
+  fill: var(--accent);
+  stroke: var(--panel-2);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.trend-point-abnormal {
+  fill: var(--red);
+}
+
+.trend-tip-bg {
+  fill: #06101f;
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.trend-tip-text {
+  fill: var(--text);
+  font-size: 11px;
+}
+
+.batch-records-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.batch-records-head h3 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.batch-records {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 /* ---------- Toast ---------- */
 .toast {
   position: fixed;
@@ -667,6 +952,10 @@ select:focus,
   }
 
   .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .batch-summary-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 

@@ -15,11 +15,22 @@ import {
   persistDraft,
   savePlan,
 } from './lib/storage';
+import { createSnapshot } from './lib/batch';
+import type { BatchThresholds } from './lib/batch';
+import {
+  appendSnapshot,
+  deleteBatch,
+  deleteSnapshot,
+  loadBatchThresholds,
+  loadSnapshots,
+  persistBatchThresholds,
+} from './lib/batchStorage';
 import { RotorDiagram } from './components/RotorDiagram';
 import { StatusPanel } from './components/StatusPanel';
 import { RecommendPanel } from './components/RecommendPanel';
 import { WeightTable } from './components/WeightTable';
 import { PlanBar } from './components/PlanBar';
+import { BatchPanel } from './components/BatchPanel';
 
 const HOLE_OPTIONS: HoleCount[] = [8, 12, 24];
 const DEFAULT_THRESHOLD = 1;
@@ -69,6 +80,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [plans, setPlans] = useState<SavedPlan[]>(() => loadPlans());
+  const [snapshots, setSnapshots] = useState(() => loadSnapshots());
+  const [batchThresholds, setBatchThresholds] = useState<BatchThresholds>(() =>
+    loadBatchThresholds(),
+  );
   const [activePlan, setActivePlan] = useState<AnyPlan | null>(null);
   const [resetSignal, setResetSignal] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
@@ -263,6 +278,49 @@ export default function App() {
     [showToast],
   );
 
+  // ---- 测量批次：仅读取当前重量快照并存入浏览器本地，不改变配平状态 ----
+  const handleSaveSnapshot = useCallback(
+    (batchCode: string) => {
+      const code = batchCode.trim();
+      if (!code) return;
+      const snapshot = createSnapshot(code, holeCount, weights);
+      setSnapshots(appendSnapshot(snapshot));
+      showToast(
+        `批次「${code}」已保存第 ${
+          loadSnapshots().filter(
+            (item) =>
+              item.batchCode === code && item.holeCount === holeCount,
+          ).length
+        } 次称量快照（不影响当前配平）`,
+      );
+    },
+    [holeCount, weights, showToast],
+  );
+
+  const handleDeleteSnapshot = useCallback(
+    (id: string) => {
+      setSnapshots(deleteSnapshot(id));
+      showToast('称量记录已删除');
+    },
+    [showToast],
+  );
+
+  const handleDeleteBatch = useCallback(
+    (batchCode: string, batchHoleCount: HoleCount) => {
+      setSnapshots(deleteBatch(batchCode, batchHoleCount));
+      showToast(`批次「${batchCode}」已删除`);
+    },
+    [showToast],
+  );
+
+  const handleChangeBatchThresholds = useCallback(
+    (next: BatchThresholds) => {
+      setBatchThresholds(next);
+      persistBatchThresholds(next);
+    },
+    [],
+  );
+
   const lockedCount = useMemo(() => locked.filter(Boolean).length, [locked]);
 
   return (
@@ -359,6 +417,17 @@ export default function App() {
         onSave={handleSave}
         onLoad={handleLoad}
         onDelete={handleDelete}
+      />
+
+      <BatchPanel
+        holeCount={holeCount}
+        weights={weights}
+        snapshots={snapshots}
+        thresholds={batchThresholds}
+        onSaveSnapshot={handleSaveSnapshot}
+        onDeleteSnapshot={handleDeleteSnapshot}
+        onDeleteBatch={handleDeleteBatch}
+        onChangeThresholds={handleChangeBatchThresholds}
       />
 
       {toast && <div className="toast">{toast}</div>}
